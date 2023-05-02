@@ -113,7 +113,7 @@ public class UserServiceImpl implements  IUserService{
         List<User> userList = userRepository.findAll();
         for (User user : userList){
             String userId = user.getId();
-            String firstname = user.getFirstname();
+            String firstname = user.getName();
             if(firstname.equals("")){
                 firstname="Anonymous";
             }
@@ -180,13 +180,13 @@ public class UserServiceImpl implements  IUserService{
     @Override
     public Userdto playGame(String id){
 
-        Optional<User> UserDb = userRepository.findById(id);
-        if (!UserDb.isPresent()) {
+        Optional<User> userDb = userRepository.findById(id);
+        if (!userDb.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Te User with id " + id + " does not exists.");
         }
 
-        User UserUpdate = UserDb.get();
-        List<Game> gameList = UserUpdate.getGames();
+        User userUpdate = userDb.get();
+        List<Game> gameList = userUpdate.getGames();
 
         if(gameList.isEmpty()){
             gameList = new ArrayList<>();
@@ -202,10 +202,9 @@ public class UserServiceImpl implements  IUserService{
         }
         game.setPoints(points);
         gameList.add(game);
-        UserUpdate.setGames(gameList);
-        userRepository.save(UserUpdate);
-        return entityToDto(UserUpdate);
-
+        userUpdate.setGames(gameList);
+        userRepository.save(userUpdate);
+        return entityToDto(userUpdate);
     }
 
 

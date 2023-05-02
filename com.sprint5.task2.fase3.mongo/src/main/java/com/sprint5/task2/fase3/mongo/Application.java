@@ -7,15 +7,17 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
 @OpenAPIDefinition(info = @Info(title = "Dice Game with JWT", version = "1.0", description = "Final project. Includes JWT + Mongodb"))
-@SecurityScheme(name = "jwtWithMongodb", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "jwtopenapi", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 @SecurityScheme(
 		name = "Bearer Authentication",
 		type = SecuritySchemeType.HTTP,
 		bearerFormat = "JWT",
 		scheme = "bearer"
 )
-@SpringBootApplication
+@SpringBootApplication (exclude = {DataSourceAutoConfiguration.class })
 public class Application {
 
 	public static void main(String[] args) {

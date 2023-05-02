@@ -1,5 +1,7 @@
 package com.sprint5.task2.fase3.mongo.controller;
 
+import com.sprint5.task2.fase3.mongo.dto.Ranking;
+import com.sprint5.task2.fase3.mongo.dto.Userdto;
 import com.sprint5.task2.fase3.mongo.service.IUserService;
 import com.sprint5.task2.fase3.mongo.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -110,29 +112,29 @@ public class UserController {
      *   with its average percentage of successes..
      */
 
-/*    @Operation(summary= "List of results of all players", description = "returns the list of all the players in the system\n" +
+    @Operation(summary= "List of results of all players", description = "returns the list of all the players in the system\n" +
             "  with its average success rate.")
     @ApiResponse(responseCode = "200", description = "List of results of all players", content = {@Content(mediaType = "application/json",
             schema = @Schema(implementation = Ranking.class))})
     @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
     @GetMapping("/players/")
     public ResponseEntity<?> findAllRanking() {
-        return ResponseEntity.ok(playerServiceMongo.listAllRanking());
+        return ResponseEntity.ok(userService.listAllRanking());
     }
 
     /**
      * GET /players/ranking: devuelve el ranking medio de todos los jugadores/as del sistema. Es decir, el porcentaje medio de logros.
      */
 
-/*    @Operation(summary= "Average of players rankings", description = "Returns the average success rate of all players")
+    @Operation(summary= "Average of players rankings", description = "Returns the average success rate of all players")
     @ApiResponse(responseCode = "200", description = "Average", content = @Content)
     @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
     @GetMapping("/players/ranking")
     public ResponseEntity<Integer> rankgingAvg(){
-        return ResponseEntity.ok(playerServiceMongo.rankingAvg());
+        return ResponseEntity.ok(userService.rankingAvg());
     }
 
-*/
+
 
 
 
@@ -179,25 +181,26 @@ public class UserController {
      * GAMES
      * POST /players/{id}/games/ : un jugador/a específico realiza un tirón de los dados.
      */
-/*    @Operation(summary= "Roll dices", description = "If dice 1 + dice 2 = 7, then the player wins. The result is saved in the database")
+    @Operation(summary= "Roll dices", description = "If dice 1 + dice 2 = 7, then the player wins. The result is saved in the database")
     @ApiResponse(responseCode = "200", description = "Game added to the database", content = {@Content(mediaType = "application/json",
-            schema = @Schema(implementation = Playerdto.class))})
-    @ApiResponse(responseCode = "404", description = "Player not found", content = @Content)
+            schema = @Schema(implementation = Userdto.class))})
+    @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
     @PostMapping("/{id}/games/")
     public ResponseEntity<?> rollDice(@PathVariable String id){
 
         try {
-            Playerdto playerdto = playerServiceMongo.playGame(id);
-            return ResponseEntity.ok(playerdto);
+            Userdto usererdto = userService.playGame(id);
+            return ResponseEntity.ok(usererdto);
         } catch (ResponseStatusException e){
             return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.NOT_FOUND);
         }
     }
+
     private Map<String, Object> message(ResponseStatusException e) {
         Map<String, Object> error = new HashMap<>();
         error.put("Message", e.getMessage());
         error.put("Reason", e.getReason());
         return error;
-    }*/
+    }
 
 }

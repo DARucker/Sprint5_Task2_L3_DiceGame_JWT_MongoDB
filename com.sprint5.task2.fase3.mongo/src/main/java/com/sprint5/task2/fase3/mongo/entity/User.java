@@ -23,7 +23,7 @@ public class User implements UserDetails {
 
     @Id
     private String id;
-    private String firstname;
+    private String name;
     private String email;
     private String password;
 
@@ -31,12 +31,11 @@ public class User implements UserDetails {
 
     private List<Game> games;
 
-    @Enumerated(EnumType.STRING)
     private List<Role> role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.toString()));
+        return null; // TODO : List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
