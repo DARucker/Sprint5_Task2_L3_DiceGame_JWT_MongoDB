@@ -30,51 +30,7 @@ public class UserServiceImpl implements  IUserService{
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
-/*
-    @Override
-    public UserToSave create (UserToSave UserToSave){
 
-        if(!UserToSave.getName().equals("")) {
-            Optional<User> UserDb = UserRepoMongo.findByName(UserToSave.getName());
-            if (UserDb.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Te User with name " + UserToSave.getName() + " exists.");
-            }
-        }
-        User UserForDb = new User();
-        List<User> lista = UserRepoMongo.findAll();
-        OptionalInt ultimoId = lista.stream().mapToInt(x -> Integer.valueOf(x.getId())).max();
-        if(ultimoId.isPresent()){
-            int ultimoIdInt = ultimoId.getAsInt();
-            int nuevoId = ultimoIdInt + 1;
-            String id = Integer.toString(nuevoId);
-            UserForDb.setId(id);
-        }else {
-            UserForDb.setId("1");
-        }
-        UserForDb.setCreated(LocalDateTime.now());
-        UserForDb.setName(UserToSave.getName());
-        List<Game> gameList = new ArrayList<>();
-        UserForDb.setGames(gameList);
-
-        User saved = UserRepoMongo.save(UserForDb);
-
-        return entityToUserToSave(saved);
-    }
-*/
-/*
-    @Override
-    public UserToSave update (UserToSave UserToSave){
-        log.info("update User: " + UserToSave);
-        Optional<User> UserDb = UserRepoMongo.findById(UserToSave.getId());
-        if (!UserDb.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Te User with id " + UserToSave.getId() + " does not exists.");
-        }
-        User UserUpdate = UserDb.get();
-        UserUpdate.setName(UserToSave.getName());
-        User updated = UserRepoMongo.save(UserUpdate);
-        return entityToUserToSave(updated);
-    }
-*/
     /*
      * DELETE /Users/{id}/games: elimina las tiradas del jugador/a.
      */
@@ -191,8 +147,8 @@ public class UserServiceImpl implements  IUserService{
         if(gameList.isEmpty()){
             gameList = new ArrayList<>();
         }
-        int dice1 = (int) (Math.random()*6);
-        int dice2 = (int) (Math.random()*6);
+        int dice1 = (int) (Math.random()*6)+1;
+        int dice2 = (int) (Math.random()*6)+1;
         int points = dice1+dice2;
         Game game = new Game();
         if(points == 7){

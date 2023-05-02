@@ -23,7 +23,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/dicegame-with-jwt-and-mongo")//"/javainuse-openapi")
+                .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/dicegame-with-jwt-and-mongo")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -36,5 +36,4 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
 }

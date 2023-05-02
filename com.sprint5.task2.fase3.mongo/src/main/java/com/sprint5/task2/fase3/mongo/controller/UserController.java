@@ -33,78 +33,41 @@ public class UserController {
     private IUserService userService;
 
     /**
-     * This method creates a Player
-     * @param playerToSave
-     * @return ResponseEntity<Playerdto>
-     */
-/*    @PostMapping(value="/add")
-    @Operation(summary= "" +
-            "Adds a new Player", description = "Creates a new player and saves it in the database")
-    @ApiResponse(responseCode = "200", description = "Player created correctly", content = {@Content(mediaType = "application/json",
-            schema = @Schema(implementation = PlayerToSave.class))})
-    @ApiResponse(responseCode = "403", description = "The player already exists", content = @Content)
-    public ResponseEntity<?> createPlayer(@RequestBody PlayerToSave playerToSave){
-        log.info("create player: " + playerToSave);
-        try {
-            playerServiceMongo.create(playerToSave);
-            return ResponseEntity.ok(playerToSave);
-        }catch (ResponseStatusException e){
-            return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.FORBIDDEN);
-        }
-    }*/
-
-    /**
-     * PUT /players: Updates the name of an existing player.
-     */
-/*    @Operation(summary= "Update Player", description = "Updates the name of an existing player")
-    @ApiResponse(responseCode = "201", description = "Player updated correctly", content = {@Content(mediaType = "application/json",
-            schema = @Schema(implementation = PlayerToSave.class))})
-    @ApiResponse(responseCode = "404", description = "Player not found", content = @Content)
-    @PutMapping(value="/update/")
-/*    public ResponseEntity<?> updatePlayer(@RequestBody PlayerToSave playerToSave){
-        log.info("update player: " + playerToSave);
-        try {
-
-            playerServiceMongo.update(playerToSave);
-            return ResponseEntity.ok(playerToSave);
-        }catch (ResponseStatusException e){
-            return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.NOT_FOUND);
-        }
-    }*/
-    /**
      * DELETE /players/{id}/games: deletes the rolls of a selected player.
      */
-/*    @Operation(summary= "Delete selected games", description = "deletes all games of selected player.")
+    @Operation(summary= "Delete selected games", description = "deletes all games of selected player.")
     @ApiResponse(responseCode = "200", description = "Games deleted", content = @Content)
+    @ApiResponse(responseCode = "403", description = "Not authenticated", content = @Content)
     @ApiResponse(responseCode = "404", description = "Player not found", content = @Content)
     @DeleteMapping("/{id}/games/")
     public ResponseEntity<?> deleteGamesByPlayerId(@PathVariable String id){
         try {
-            playerServiceMongo.deleteGamesByPlayerId(id);
+            userService.deleteGamesByUserId(id);
             return ResponseEntity.ok(HttpStatus.OK);
         }catch(ResponseStatusException e){
             return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.NOT_FOUND);
         }
-    }*/
+    }
 
     /**
      * GET /players/{id}/games: devuelve el listado de jugadas por un jugador/a.
      * @param id
      * @return
      */
-/*    @Operation(summary= "List all dice rolls for a player", description = "Returns the complete list of each player and the result of their dice rolls.")
+    @Operation(summary= "List all dice rolls for a player", description = "Returns the complete list of each player and the result of their dice rolls.")
     @ApiResponse(responseCode = "200", description = "List of rolls", content = {@Content(mediaType = "application/json",
-            schema = @Schema(implementation = Playerdto.class))})
+            schema = @Schema(implementation = Userdto.class))})
     @ApiResponse(responseCode = "404", description = "Player not found", content = @Content)
     @GetMapping("/{id}/games/")
     public ResponseEntity<?> findAllGames(@PathVariable String id) {
         try {
-            Playerdto playerdto = playerServiceMongo.findById(id);
-            return ResponseEntity.ok(playerdto);
+            Userdto userdto = userService.findById(id);
+            return ResponseEntity.ok(userdto);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.NOT_FOUND);
         }
-    }*/
+    }
+
     //     public ResponseEntity<?> findAllRanking()
 
     /**
@@ -134,16 +97,10 @@ public class UserController {
         return ResponseEntity.ok(userService.rankingAvg());
     }
 
-
-
-
-
-
-
     /**
      *  GET /players/ranking/loser: Returns the player with the lowest success rate.
      */
-/*    @Operation(summary= "Player with the worst ranking", description = "Returns the player with the lowest success rate")
+    @Operation(summary= "Player with the worst ranking", description = "Returns the player with the lowest success rate")
     @ApiResponse(responseCode = "200", description = "Player id and games results", content = {@Content(mediaType = "application/json",
             schema = @Schema(implementation = Ranking.class))})
     @ApiResponse(responseCode = "204", description = "No content. There are no games saved in the database", content = @Content)
@@ -152,30 +109,31 @@ public class UserController {
     public ResponseEntity<?> worstPlayer(){
         Ranking worstPlayer;
         try {
-            worstPlayer = playerServiceMongo.worstPlayer();
+            worstPlayer = userService.worstUser();
         } catch (ResponseStatusException e) {
             return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(worstPlayer);
-    }*/
+    }
+
     /**
      * GET /players/ranking/winenr: Returns the player with the lowest success rate.
      */
-/*    @Operation(summary= "Player with the best ranking", description = "Returns the player with the highest success rate")
+    @Operation(summary= "Player with the best ranking", description = "Returns the player with the highest success rate")
     @ApiResponse(responseCode = "200", description = "Player id and games results", content = {@Content(mediaType = "application/json",
             schema = @Schema(implementation = Ranking.class))})
     @ApiResponse(responseCode = "204", description = "No content. There are no games saved in the database", content = @Content)
     @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
     @GetMapping("ranking/winner")
     public ResponseEntity<?> bestPlayer(){
-        Ranking bestPlayer;
+        Ranking bestUser;
         try {
-            bestPlayer = playerServiceMongo.bestPlayer();
+            bestUser = userService.bestUser();
         } catch (ResponseStatusException e) {
             return new ResponseEntity<Map<String,Object>>(this.message(e), HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(bestPlayer);
-    }*/
+        return ResponseEntity.ok(bestUser);
+    }
 
     /**
      * GAMES

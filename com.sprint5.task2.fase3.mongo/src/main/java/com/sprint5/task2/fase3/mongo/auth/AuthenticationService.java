@@ -4,6 +4,8 @@ import com.sprint5.task2.fase3.mongo.entity.Game;
 import com.sprint5.task2.fase3.mongo.entity.User;
 import com.sprint5.task2.fase3.mongo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +22,7 @@ import java.util.OptionalInt;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+    private static Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -59,6 +62,28 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * This method updates the name of the user
+     * @param  // RegisterRequest request
+     * @return AuthenticationResponse
+     */
+
+    public AuthenticationResponse update (RegisterRequest register){
+        log.info("Register request: " + register);
+        Optional<User> userDb = repository.findByEmail(register.getEmail());
+        if (!userDb.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Te player with email " + register.getEmail() + " does not exists.");
+        }
+        User userUpdate = userDb.get();
+        userUpdate.setName(register.getName());
+        User updated = repository.save(userUpdate);
+        var jwtToken = jwtService.generateToken(updated);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         authenticationManager.authenticate(
@@ -67,8 +92,7 @@ public class AuthenticationService {
                         request.getPassword()
                 ));
         var user = repository.findByEmail(request.getEmail())
- //               .orElseThrow();
-                .orElseThrow (() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "no user with email: " + request.getEmail()));
+                .orElseThrow ();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
